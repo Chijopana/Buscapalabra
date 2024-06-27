@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Honk&family=Madimi+One&display=swap');
+
+*{
+    font-family: "Honk", system-ui;
+}
+
+
+.row{
+    justify-content: space-evenly;
+
+}
+
+#current_word{
+    font-size: 2rem;
+
+}
+
+#adivina{
+    width: 300px;
+    height: 330px;
+}
+
+#btn{
+    margin-top: 15px;
+    display: block;
+    color: #fff;
+    background-color: #f77754;
+    transition: 0.8s;
+    font-weight: bold;
+    border: 1px solid #f77754;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 3opx;
+
+}
+
+.message{
+    margin-top: 15px;
+    display: none;
+    font-weight: bold;
+}
+
+#juego{
+    min-width: 400px;
+}
+
+#letra{
+    font-size: 1.8rem;
+    padding: 5px;
+}
+
+.ganar{
+    font-size: 4rem;
+    color: red;
+}
+
+.bold{
+    font-weight: bold;
+}
