@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="juegos de adivinar palabras" />
-    <meta name="keywords" content="juego adivinar palabras" />
-    <meta name="autor" content="joseeee" />
-    <link rel="stylesheet" href="./assets/css/styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Honk&family=Madimi+One&display=swap"
-      rel="stylesheet"
-    />
-    <title>Adivina Palabras</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1 id="honk">Juego de Adivinar Palabras</h1>
-      <div class="row">
-        <div id="juego">
-          <div id="current_word"></div>
-          <p class="bold">Introduzca una letra:</p>
-          <input type="text" id="letra" />
-          <input type="button" id="btn" onclick="evaluarLetra()" value="Verificar letra" />
-          <div class="message">Noooo! perdiste</div>
-        </div>
-        <div id="adivina"></div>
-      </div>
-      <div class="contador"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="juegos de adivinar palabras" />
+  <meta name="keywords" content="juego adivinar palabras" />
+  <meta name="autor" content="joseeee" />
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Honk&family=Madimi+One&display=swap" rel="stylesheet" />
+  <title>Adivina Palabras</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🧠 Adivina la Palabra</h1>
+
+    <div class="modo-container" role="radiogroup" aria-label="Modos de juego">
+      <label><input type="radio" name="mode" value="easy" checked /> Fácil</label>
+      <label><input type="radio" name="mode" value="normal" /> Normal</label>
+      <label><input type="radio" name="mode" value="hard" /> Difícil</label>
     </div>
-    <script src="./assets/js/main.js"></script>
-  </body>
+
+    <div id="juego">
+      <div id="current_word" aria-live="polite" aria-atomic="true"></div>
+      <div class="input-row">
+        <input type="text" id="letra" maxlength="1" aria-label="Introduce una letra" autocomplete="off" />
+        <button id="btn" aria-label="Verificar letra">Verificar</button>
+      </div>
+      <div class="message" id="message">❌ Letra incorrecta</div>
+      <div class="contador">Errores: <span id="errores">0</span> / <span id="max_errores">5</span></div>
+      <div id="score">Puntuación: 0</div>
+      <button id="btn-restart" aria-label="Reiniciar juego">Reiniciar Juego</button>
+    </div>
+  </div>
+  <script src="./assets/js/main.js"></script>
+</body>
+
 </html>
