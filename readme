@@ -1,0 +1,44 @@
+🎮 Adivina la Palabra – Word Guessing Game
+
+Juego web interactivo donde el usuario debe descubrir una palabra oculta utilizando lógica, intentos limitados y pistas visuales.
+Desarrollado como proyecto personal para mejorar la manipulación del DOM, eventos, lógica de juego y diseño frontend.
+
+🚀 Demo
+
+👉 Deploy: https://buscapalabra.vercel.app/
+
+✨ Características principales
+
+✔️ Lógica completa para validar letras e intentos
+
+✔️ Interfaz dinámica y actualizada en tiempo real
+
+✔️ Indicadores visuales (correcta / incorrecta / posición)
+
+✔️ Diseño adaptable y limpio
+
+✔️ Reinicio rápido sin recargar la página
+
+🧠 Motivación y aprendizajes
+
+Este proyecto me ayudó a profundizar en:
+
+Manipulación avanzada del DOM
+
+Control del estado del juego
+
+Buenas prácticas de código en JavaScript
+
+Manejo de eventos de teclado y botones
+
+Diseño de UI simple pero intuitivo
+
+Además, reforzó mi capacidad para estructurar la lógica del juego separada de la interfaz.
+
+🛠️ Tecnologías utilizadas
+
+HTML5
+
+CSS3
+
+JavaScript (Vanilla)
