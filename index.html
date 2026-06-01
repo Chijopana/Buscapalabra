@@ -4,38 +4,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="juegos de adivinar palabras" />
-  <meta name="keywords" content="juego adivinar palabras" />
-  <meta name="autor" content="joseeee" />
-  <link rel="stylesheet" href="./assets/css/styles.css" />
+  <meta name="description" content="Juego de adivinar palabras con teclado virtual, estadísticas y modos de juego" />
+  <meta name="keywords" content="juego, adivinar palabras, hangman, ahorcado" />
+  <meta name="author" content="Jose" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Honk&family=Madimi+One&display=swap" rel="stylesheet" />
-  <title>Adivina Palabras</title>
+  <link href="https://fonts.googleapis.com/css2?family=Madimi+One&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+  <title>Adivina la Palabra</title>
 </head>
 
 <body>
-  <div class="container">
-    <h1>🧠 Adivina la Palabra</h1>
-
-    <div class="modo-container" role="radiogroup" aria-label="Modos de juego">
-      <label><input type="radio" name="mode" value="easy" checked /> Fácil</label>
-      <label><input type="radio" name="mode" value="normal" /> Normal</label>
-      <label><input type="radio" name="mode" value="hard" /> Difícil</label>
-    </div>
-
-    <div id="juego">
-      <div id="current_word" aria-live="polite" aria-atomic="true"></div>
-      <div class="input-row">
-        <input type="text" id="letra" maxlength="1" aria-label="Introduce una letra" autocomplete="off" />
-        <button id="btn" aria-label="Verificar letra">Verificar</button>
+  <div class="page-shell">
+    <header class="topbar card">
+      <div>
+        <p class="eyebrow">Portfolio game</p>
+        <h1>🧠 Adivina la Palabra</h1>
       </div>
-      <div class="message" id="message">❌ Letra incorrecta</div>
-      <div class="contador">Errores: <span id="errores">0</span> / <span id="max_errores">5</span></div>
-      <div id="score">Puntuación: 0</div>
-      <button id="btn-restart" aria-label="Reiniciar juego">Reiniciar Juego</button>
+      <div class="toolbar">
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Cambiar tema">☾</button>
+        <button class="icon-button" id="sound-toggle" type="button" aria-label="Activar o desactivar sonido">🔊</button>
+        <button class="pill-button" id="btn-restart" type="button">Nuevo juego</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="game-column">
+        <section class="card status-card">
+          <div class="status-row">
+            <span class="status-chip" id="difficulty-label">Fácil</span>
+            <span class="status-chip accent" id="mode-label">Clásico</span>
+            <span class="status-chip" id="category-label">Categoría: General</span>
+          </div>
+          <div class="status-row secondary">
+            <span id="timer-label">Tiempo: 60s</span>
+            <span id="score">Puntuación: 0</span>
+          </div>
+        </section>
+
+        <section class="card game-card" aria-labelledby="word-title">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Palabra oculta</p>
+              <h2 id="word-title">Adivina antes de que se acabe el turno</h2>
+            </div>
+            <span class="mode-badge" id="mode-badge">CLÁSICO</span>
+          </div>
+
+          <div class="hangman-panel">
+            <svg id="hangman" viewBox="0 0 220 240" role="img" aria-label="Dibujo del ahorcado">
+              <line class="hangman-step" x1="20" y1="220" x2="200" y2="220"></line>
+              <line class="hangman-step" x1="55" y1="220" x2="55" y2="20"></line>
+              <line class="hangman-step" x1="55" y1="20" x2="145" y2="20"></line>
+              <line class="hangman-step" x1="145" y1="20" x2="145" y2="42"></line>
+              <circle class="hangman-step" cx="145" cy="64" r="22"></circle>
+              <line class="hangman-step" x1="145" y1="86" x2="145" y2="142"></line>
+              <line class="hangman-step" x1="145" y1="100" x2="116" y2="124"></line>
+              <line class="hangman-step" x1="145" y1="100" x2="174" y2="124"></line>
+              <line class="hangman-step" x1="145" y1="142" x2="120" y2="182"></line>
+              <line class="hangman-step" x1="145" y1="142" x2="170" y2="182"></line>
+            </svg>
+            <div class="hangman-meta">
+              <div>
+                <span class="meta-label">Racha</span>
+                <strong id="streak-value">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div id="current_word" class="word-display" aria-live="polite" aria-atomic="true"></div>
+
+          <div class="input-row">
+            <input type="text" id="letra" maxlength="1" aria-label="Introduce una letra" autocomplete="off" inputmode="text" />
+            <button id="btn" type="button">Probar letra</button>
+          </div>
+
+          <div class="message" id="message" aria-live="polite"></div>
+          <div class="result-banner" id="result-banner" hidden></div>
+        </section>
+
+        <section class="card keyboard-card">
+          <div class="card-heading compact">
+            <div>
+              <p class="eyebrow">Teclado virtual</p>
+              <h2>Elige una letra</h2>
+            </div>
+          </div>
+          <div class="keyboard" id="keyboard" aria-label="Teclado virtual"></div>
+        </section>
+      </section>
+
+      <aside class="sidebar">
+        <section class="card sidebar-card">
+          <div class="card-heading compact">
+            <div>
+              <p class="eyebrow">Ajustes</p>
+              <h2>Modo de juego</h2>
+            </div>
+          </div>
+          <div class="mode-container" role="radiogroup" aria-label="Dificultad">
+            <label><input type="radio" name="difficulty" value="easy" checked /> Fácil</label>
+            <label><input type="radio" name="difficulty" value="normal" /> Normal</label>
+            <label><input type="radio" name="difficulty" value="hard" /> Difícil</label>
+          </div>
+          <label class="select-field">
+            <span>Tipo de partida</span>
+            <select id="game-mode">
+              <option value="classic">Clásico</option>
+              <option value="timed">Contrarreloj</option>
+              <option value="unlimited">Unlimited</option>
+              <option value="eliminated">Letras eliminadas</option>
+              <option value="multiplier">Multiplicador</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="card sidebar-card">
+          <div class="card-heading compact">
+            <div>
+              <p class="eyebrow">Letras usadas</p>
+              <h2>Historial de intentos</h2>
+            </div>
+          </div>
+          <div class="used-letters" id="used-list">Aún no has jugado.</div>
+          <div class="used-letters subtle" id="eliminated-list"></div>
+        </section>
+
+        <section class="card sidebar-card">
+          <div class="card-heading compact">
+            <div>
+              <p class="eyebrow">Progreso</p>
+              <h2>Estadísticas</h2>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <article><span>Jugados</span><strong id="stat-played">0</strong></article>
+            <article><span>Ganados</span><strong id="stat-wins">0</strong></article>
+            <article><span>Perdidos</span><strong id="stat-losses">0</strong></article>
+            <article><span>Acierto</span><strong id="stat-rate">0%</strong></article>
+            <article><span>Racha</span><strong id="stat-streak">0</strong></article>
+            <article><span>Puntos</span><strong id="stat-score">0</strong></article>
+          </div>
+          <div class="history-list" id="history-list"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="modal" id="resultModal" hidden>
+    <div class="modal-content card">
+      <p class="eyebrow" id="result-variant">Resultado</p>
+      <h2 id="result-title">Partida terminada</h2>
+      <p id="result-word"></p>
+      <p id="result-score"></p>
+      <div class="modal-actions">
+        <button class="pill-button" id="next-game" type="button">Siguiente palabra</button>
+        <button class="ghost-button" id="close-modal" type="button">Seguir mirando</button>
+      </div>
     </div>
   </div>
+
+  <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
   <script src="./assets/js/main.js"></script>
 </body>
 
