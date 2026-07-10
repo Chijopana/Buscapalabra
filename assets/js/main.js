@@ -134,6 +134,7 @@ const state = {
   roundDuration: 0,
   timerId: null,
   finished: false,
+  roundToken: 0,
 };
 
 function loadState() {
@@ -547,6 +548,8 @@ function resetRoundState() {
 function startGame() {
   closeResultModal();
   resetRoundState();
+  state.roundToken += 1;
+  const activeRoundToken = state.roundToken;
   state.roundStartedAt = Date.now();
   renderUsedLetters();
   renderStats();
@@ -562,6 +565,7 @@ function startGame() {
   renderModeInfo();
 
   fetchWordForMode(state.difficulty).then((wordData) => {
+    if (activeRoundToken !== state.roundToken || state.finished) return;
     state.wordData = wordData;
     state.secretWord = wordData.word;
     state.normalizedWord = normalizeWord(wordData.word);
