@@ -1,0 +1,18 @@
+# Dependencias (el proyecto no usa ninguna, pero por si se añaden herramientas)
+node_modules/
+package-lock.json
+
+# Entornos y despliegue
+.vercel
+.env
+.env.local
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp

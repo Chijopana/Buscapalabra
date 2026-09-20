@@ -4,130 +4,205 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Juego de adivinar palabras con teclado virtual, estadísticas y modos de juego" />
-  <meta name="keywords" content="juego, adivinar palabras, hangman, ahorcado" />
-  <meta name="author" content="Jose" />
+  <title>Adivina la Palabra — juego de palabras en español</title>
+  <meta name="description" content="Juego del ahorcado en español: 137 palabras con pistas, reto diario, 5 modos de juego, logros, estadísticas y teclado QWERTY. Sin instalación." />
+  <meta name="author" content="Jose Blondel" />
+  <meta name="theme-color" content="#0b0d18" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f5efe5" media="(prefers-color-scheme: light)" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Adivina la Palabra" />
+  <meta property="og:description" content="Ahorcado en español con reto diario, pistas, logros y estadísticas. Hecho con HTML, CSS y JavaScript puro." />
+  <meta property="og:url" content="https://buscapalabra.vercel.app/" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='26' fill='%230b0d18'/><text x='50' y='73' font-size='62' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%23e9c46a'>A</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/css/styles.css" />
-  <title>Adivina la Palabra</title>
 </head>
 
 <body>
+  <a class="skip-link" href="#word-display">Saltar al juego</a>
+
   <div class="page-shell">
     <header class="topbar card">
-      <div>
-        <p class="eyebrow">Portfolio game</p>
-        <h1>🧠 Adivina la Palabra</h1>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <div>
+          <h1>Adivina la Palabra</h1>
+          <p class="tagline">Ahorcado en español · <span id="bank-size">388</span> palabras con pista</p>
+        </div>
       </div>
       <div class="toolbar">
-        <button class="icon-button" id="theme-toggle" type="button" aria-label="Cambiar tema">☾</button>
-        <button class="icon-button" id="sound-toggle" type="button" aria-label="Activar o desactivar sonido">🔊</button>
-        <button class="pill-button" id="btn-restart" type="button">Nuevo juego</button>
+        <button class="icon-button" id="btn-help" type="button" aria-label="Cómo se juega" title="Cómo se juega">?</button>
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">🌙</button>
+        <button class="icon-button" id="sound-toggle" type="button" aria-label="Activar o desactivar sonido" title="Sonido" aria-pressed="true">🔊</button>
+        <button class="pill-button" id="btn-restart" type="button">Nueva palabra</button>
       </div>
     </header>
 
     <main class="layout">
-      <section class="game-column">
-        <section class="card status-card">
+      <div class="game-column">
+
+        <section class="card status-card" aria-label="Estado de la partida">
           <div class="status-row">
-            <span class="status-chip" id="difficulty-label">Fácil</span>
-            <span class="status-chip accent" id="mode-label">Clásico</span>
-            <span class="status-chip" id="category-label">Categoría: General</span>
+            <span class="status-chip" id="chip-difficulty">Normal</span>
+            <span class="status-chip accent" id="chip-mode">Clásico</span>
+            <span class="status-chip" id="chip-category">Categoría: —</span>
+            <span class="status-chip daily-chip" id="chip-daily" hidden>📅 Reto diario</span>
+            <span class="status-chip combo-chip" id="chip-combo" hidden>✖️ 1.0</span>
           </div>
+
           <div class="status-row secondary">
-            <span id="timer-label">Tiempo: 60s</span>
-            <span id="score">Puntuación: 0</span>
+            <div class="lives" id="lives" aria-label="Vidas restantes"></div>
+            <div class="score-readout">
+              <span>Total <strong id="score-total">0</strong></span>
+              <span class="divider" aria-hidden="true">·</span>
+              <span title="Puntos que ganarías si resuelves ahora">En juego <strong id="score-round">0</strong></span>
+            </div>
+          </div>
+
+          <div class="timer" id="timer" hidden>
+            <div class="timer-track"><div class="timer-bar" id="timer-bar"></div></div>
+            <span class="timer-text" id="timer-text">60s</span>
           </div>
         </section>
 
-        <section class="card game-card" aria-labelledby="word-title">
+        <section class="card game-card" aria-labelledby="game-title">
           <div class="card-heading">
             <div>
               <p class="eyebrow">Palabra oculta</p>
-              <h2 id="word-title">Adivina antes de que se acabe el turno</h2>
+              <h2 id="game-title">Descúbrela letra a letra</h2>
             </div>
             <span class="mode-badge" id="mode-badge">CLÁSICO</span>
           </div>
 
-          <div class="hangman-panel">
-            <svg id="hangman" viewBox="0 0 220 240" role="img" aria-label="Dibujo del ahorcado">
-              <line class="hangman-step" x1="20" y1="220" x2="200" y2="220"></line>
-              <line class="hangman-step" x1="55" y1="220" x2="55" y2="20"></line>
-              <line class="hangman-step" x1="55" y1="20" x2="145" y2="20"></line>
-              <line class="hangman-step" x1="145" y1="20" x2="145" y2="42"></line>
-              <circle class="hangman-step" cx="145" cy="64" r="22"></circle>
-              <line class="hangman-step" x1="145" y1="86" x2="145" y2="142"></line>
-              <line class="hangman-step" x1="145" y1="100" x2="116" y2="124"></line>
-              <line class="hangman-step" x1="145" y1="100" x2="174" y2="124"></line>
-              <line class="hangman-step" x1="145" y1="142" x2="120" y2="182"></line>
-              <line class="hangman-step" x1="145" y1="142" x2="170" y2="182"></line>
-            </svg>
-            <div class="hangman-meta">
-              <div>
-                <span class="meta-label">Racha</span>
-                <strong id="streak-value">0</strong>
-              </div>
+          <div class="board">
+            <div class="hangman-panel">
+              <svg id="hangman" viewBox="0 0 200 220" role="img" aria-labelledby="hangman-title">
+                <title id="hangman-title">Muñeco del ahorcado según los fallos cometidos</title>
+                <g class="gallows">
+                  <line x1="18" y1="206" x2="118" y2="206" />
+                  <line x1="46" y1="206" x2="46" y2="16" />
+                  <line x1="46" y1="16" x2="134" y2="16" />
+                  <line x1="134" y1="16" x2="134" y2="38" />
+                </g>
+                <g class="figure">
+                  <circle class="figure-part" cx="134" cy="60" r="22" />
+                  <line class="figure-part" x1="134" y1="82" x2="134" y2="140" />
+                  <line class="figure-part" x1="134" y1="96" x2="105" y2="122" />
+                  <line class="figure-part" x1="134" y1="96" x2="163" y2="122" />
+                  <line class="figure-part" x1="134" y1="140" x2="110" y2="180" />
+                  <line class="figure-part" x1="134" y1="140" x2="158" y2="180" />
+                </g>
+              </svg>
+              <dl class="hangman-meta">
+                <div><dt>Racha</dt><dd id="streak-value">0</dd></div>
+                <div><dt>Fallos</dt><dd id="errors-value">0</dd></div>
+              </dl>
+            </div>
+
+            <div class="board-main">
+              <div id="word-display" class="word-display" aria-hidden="true"></div>
+              <p class="sr-only" id="sr-status" role="status" aria-live="polite"></p>
+              <p class="hint-text" id="hint-text" hidden></p>
+              <p class="hint-text wiki" id="wiki-text" hidden></p>
+              <p class="message" id="message" role="status" aria-live="polite"></p>
             </div>
           </div>
 
-          <div id="current_word" class="word-display" aria-live="polite" aria-atomic="true"></div>
-
-          <div class="input-row">
-            <input type="text" id="letra" maxlength="1" aria-label="Introduce una letra" autocomplete="off" inputmode="text" />
-            <button id="btn" type="button">Probar letra</button>
+          <div class="actions">
+            <button class="ghost-button small" id="btn-hint-def" type="button">
+              💡 Ver pista <span class="cost">−15 pts</span>
+            </button>
+            <button class="ghost-button small" id="btn-hint-letter" type="button">
+              🔎 Revelar letra <span class="cost">−1 vida</span>
+            </button>
+            <button class="ghost-button small wiki" id="btn-hint-wiki" type="button" hidden>
+              🌐 Dato real <span class="cost">−20 pts</span>
+            </button>
+            <button class="ghost-button small danger" id="btn-giveup" type="button">🏳️ Rendirse</button>
           </div>
 
-          <div class="message" id="message" aria-live="polite"></div>
-          <div class="result-banner" id="result-banner" hidden></div>
+          <form class="solve-row" id="solve-form" autocomplete="off">
+            <input type="text" id="solve-input" placeholder="¿La sabes? Escribe la palabra completa" aria-label="Resolver la palabra completa" autocomplete="off" spellcheck="false" />
+            <button id="btn-solve" type="submit">Resolver</button>
+          </form>
         </section>
 
-        <section class="card keyboard-card">
+        <section class="card keyboard-card" aria-labelledby="keyboard-title">
           <div class="card-heading compact">
             <div>
-              <p class="eyebrow">Teclado virtual</p>
-              <h2>Elige una letra</h2>
+              <p class="eyebrow">Teclado</p>
+              <h2 id="keyboard-title">Pulsa o escribe una letra</h2>
             </div>
+            <span class="legend">
+              <span class="legend-dot hit"></span>acierto
+              <span class="legend-dot miss"></span>fallo
+            </span>
           </div>
-          <div class="keyboard" id="keyboard" aria-label="Teclado virtual"></div>
+          <div class="keyboard" id="keyboard"></div>
         </section>
-      </section>
+      </div>
 
       <aside class="sidebar">
         <section class="card sidebar-card">
           <div class="card-heading compact">
             <div>
               <p class="eyebrow">Ajustes</p>
-              <h2>Modo de juego</h2>
+              <h2>Cómo quieres jugar</h2>
             </div>
           </div>
-          <div class="mode-container" role="radiogroup" aria-label="Dificultad">
-            <label><input type="radio" name="difficulty" value="easy" checked /> Fácil</label>
-            <label><input type="radio" name="difficulty" value="normal" /> Normal</label>
-            <label><input type="radio" name="difficulty" value="hard" /> Difícil</label>
-          </div>
+
+          <button class="daily-button" id="btn-daily" type="button">
+            <span class="daily-icon" aria-hidden="true">📅</span>
+            <span>
+              <strong>Reto diario</strong>
+              <small id="daily-status">La misma palabra para todos</small>
+            </span>
+          </button>
+
+          <fieldset class="mode-container">
+            <legend class="eyebrow">Dificultad</legend>
+            <label><input type="radio" name="difficulty" value="easy" /><span>Fácil</span></label>
+            <label><input type="radio" name="difficulty" value="normal" checked /><span>Normal</span></label>
+            <label><input type="radio" name="difficulty" value="hard" /><span>Difícil</span></label>
+          </fieldset>
+
           <label class="select-field">
             <span>Tipo de partida</span>
             <select id="game-mode">
-              <option value="classic">Clásico</option>
-              <option value="timed">Contrarreloj</option>
-              <option value="unlimited">Unlimited</option>
-              <option value="eliminated">Letras eliminadas</option>
-              <option value="multiplier">Multiplicador</option>
+              <option value="classic">🎯 Clásico</option>
+              <option value="timed">⏱️ Contrarreloj</option>
+              <option value="eliminated">🔥 Letras quemadas</option>
+              <option value="multiplier">✖️ Multiplicador</option>
+              <option value="practice">🧪 Práctica (no puntúa)</option>
             </select>
           </label>
+          <p class="mode-desc" id="mode-desc"></p>
         </section>
 
         <section class="card sidebar-card">
           <div class="card-heading compact">
             <div>
-              <p class="eyebrow">Letras usadas</p>
+              <p class="eyebrow">Letras</p>
               <h2>Historial de intentos</h2>
             </div>
           </div>
-          <div class="used-letters" id="used-list">Aún no has jugado.</div>
-          <div class="used-letters subtle" id="eliminated-list"></div>
+          <div class="used-letters" id="used-list"></div>
+          <p class="used-letters subtle" id="eliminated-list" hidden></p>
+        </section>
+
+        <section class="card sidebar-card">
+          <div class="card-heading compact">
+            <div>
+              <p class="eyebrow">Logros</p>
+              <h2><span id="achievement-count">0</span>/12 desbloqueados</h2>
+            </div>
+          </div>
+          <div class="achievements" id="achievements"></div>
         </section>
 
         <section class="card sidebar-card">
@@ -136,38 +211,80 @@
               <p class="eyebrow">Progreso</p>
               <h2>Estadísticas</h2>
             </div>
+            <button class="icon-button tiny" id="btn-reset-stats" type="button" aria-label="Borrar estadísticas" title="Borrar estadísticas">🗑</button>
           </div>
           <div class="stats-grid">
-            <article><span>Jugados</span><strong id="stat-played">0</strong></article>
-            <article><span>Ganados</span><strong id="stat-wins">0</strong></article>
-            <article><span>Perdidos</span><strong id="stat-losses">0</strong></article>
+            <article><span>Jugadas</span><strong id="stat-played">0</strong></article>
+            <article><span>Ganadas</span><strong id="stat-wins">0</strong></article>
             <article><span>Acierto</span><strong id="stat-rate">0%</strong></article>
             <article><span>Racha</span><strong id="stat-streak">0</strong></article>
+            <article><span>Mejor racha</span><strong id="stat-best-streak">0</strong></article>
             <article><span>Puntos</span><strong id="stat-score">0</strong></article>
+            <article><span>Mejor tiempo</span><strong id="stat-best-time">—</strong></article>
+            <article><span>Perdidas</span><strong id="stat-losses">0</strong></article>
           </div>
           <div class="history-list" id="history-list"></div>
         </section>
       </aside>
     </main>
+
+    <footer class="site-footer">
+      <p>Hecho con HTML, CSS y JavaScript puro — sin frameworks ni dependencias.</p>
+      <p><a href="https://github.com/Chijopana/Buscapalabra" target="_blank" rel="noopener noreferrer">Código en GitHub</a></p>
+    </footer>
   </div>
 
-  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="true"></div>
-
-  <div class="modal" id="resultModal" hidden>
-    <div class="modal-content card">
-      <p class="eyebrow" id="result-variant">Resultado</p>
-      <h2 id="result-title">Partida terminada</h2>
-      <p id="result-word"></p>
-      <p id="result-score"></p>
-      <div class="modal-actions">
-        <button class="pill-button" id="next-game" type="button">Siguiente palabra</button>
-        <button class="ghost-button" id="close-modal" type="button">Seguir mirando</button>
-      </div>
-    </div>
-  </div>
-
+  <div class="toast-stack" id="toast-stack" role="status" aria-live="polite"></div>
   <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
 
+  <dialog class="modal" id="result-modal" aria-labelledby="result-title">
+    <div class="modal-content">
+      <p class="eyebrow" id="result-variant">Resultado</p>
+      <h2 id="result-title">Partida terminada</h2>
+      <p class="result-word" id="result-word"></p>
+      <p class="result-hint" id="result-hint"></p>
+      <p class="result-trail" id="result-trail"></p>
+      <p class="result-score" id="result-score"></p>
+
+      <div class="result-wiki" id="result-wiki" hidden>
+        <img id="result-wiki-thumb" src="" alt="" hidden />
+        <div class="result-wiki-body">
+          <p class="eyebrow">Dato de Wikipedia</p>
+          <p id="result-wiki-text"></p>
+          <a id="result-wiki-link" href="#" target="_blank" rel="noopener noreferrer">Leer el artículo →</a>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-button" id="btn-next" type="button">Siguiente palabra</button>
+        <button class="ghost-button" id="btn-share" type="button">📋 Compartir</button>
+        <button class="ghost-button" id="btn-close-modal" type="button">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal" id="help-modal" aria-labelledby="help-title">
+    <div class="modal-content help">
+      <p class="eyebrow">Guía rápida</p>
+      <h2 id="help-title">Cómo se juega</h2>
+      <ul class="help-list">
+        <li><strong>Objetivo:</strong> descubrir la palabra antes de quedarte sin vidas.</li>
+        <li><strong>Escribe</strong> directamente con tu teclado o pulsa el teclado en pantalla.</li>
+        <li><strong>Acentos:</strong> no hacen falta. La <em>Ñ</em> sí es una letra aparte.</li>
+        <li><strong>Vidas:</strong> 8 en fácil, 6 en normal, 5 en difícil.</li>
+        <li><strong>Pistas:</strong> la definición cuesta 15 puntos; revelar una letra cuesta una vida.</li>
+        <li><strong>Resolver:</strong> si la intuyes, escríbela entera. Fallar cuesta una vida.</li>
+        <li><strong>Reto diario:</strong> una palabra igual para todo el mundo, y solo puntúa el primer intento del día.</li>
+        <li><strong>Dato real:</strong> si hay artículo en Wikipedia sobre la palabra, puedes pedirlo como pista (la palabra aparece tapada). Al terminar lo verás entero.</li>
+      </ul>
+      <h3 class="help-subtitle">Modos</h3>
+      <ul class="help-list compact" id="help-modes"></ul>
+      <div class="modal-actions">
+        <button class="pill-button" id="btn-close-help" type="button">Entendido</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="./assets/js/words.js"></script>
   <script src="./assets/js/main.js"></script>
 </body>
 
